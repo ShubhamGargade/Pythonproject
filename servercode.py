@@ -15,7 +15,7 @@ def decrypt(cipher):
     ct=normaltext.count('{')
     return normaltext[:len(normaltext)-ct]
 s=socket.socket()
-host=socket.gethostname
+host=socket.gethostname()
 port=1234
 print ("ip is:",host)
 s.bind((host,port))
