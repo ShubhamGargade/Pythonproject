@@ -2,13 +2,13 @@ import socket
 def Encrypt_XOR(cmd,key):
     st=""
     for i in cmd:
-        st+=str(ord(i))+str(ord('{'))
+        st+=str(ord(i))+str(ord('~'))
     cipher=int(st)^key
     h=hex(cipher)
-    print("\nciphertext:",h)
-    return h
+    print("\nciphertext:",h[2:len(h)])
+    return h[2:len(h)]
 def Decrypt_XOR():
-        t=int(decrypt,0)
+        t=int('0x'+str(decrypt),0)
         pt=(t^key)
         pt=str(pt)
         bt=''
@@ -23,7 +23,7 @@ def Decrypt_XOR():
               continue
           if i<l:
             bt=pt[i]+pt[i+1]+pt[i+2]
-            if bt == '123':
+            if bt == '126':
                 count+=2
                 bt=0
                 plaintext+=chr(int(s))
@@ -45,10 +45,11 @@ s=socket.socket()
 host=socket.gethostname()
 port=1234
 print("ip: ",host)
+print("\nCONNECTING............")
 s.bind((host,port))
 s.listen()
 c,add=s.accept()
-print ("\nGot connection with: ",add)
+print ("\nCONNECTED WITH CLIENT: ",add)
 key=create_key()
 cmd=""
 while cmd!="bye":
