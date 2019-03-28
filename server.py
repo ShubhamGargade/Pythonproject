@@ -7,7 +7,7 @@ def Encrypt_XOR(cmd,key):                         #Encrypts the plaintext
     h=hex(cipher)
     #print("\nciphertext:",h[2:len(h)])
     return h[2:len(h)]
-def Decrypt_XOR():                               #Decrypts  the ciphertext
+def Decrypt_XOR(decrypt,key):                               #Decrypts  the ciphertext
         t=int('0x'+str(decrypt),0)
         pt=(t^key)
         pt=str(pt)
@@ -32,7 +32,7 @@ def Decrypt_XOR():                               #Decrypts  the ciphertext
                 s+=(pt[i])
                 bt=0
         return plaintext
-def create_key():                               #Generates keys for encryption and decryption purpose
+def create_key():                               #Generates keys for encryption and decryption purpose using Diffe Hellman algorithm
     p=2379
     q=3289
     a=6734
@@ -52,12 +52,15 @@ c,add=s.accept()
 print ("\nCONNECTED WITH CLIENT: ",add)   #shows connection with client by displaying it's host and port
 key=create_key()
 cmd=""
+r=''
 while cmd!="bye":
   cmd=input("\nSERVER: ")
+  if cmd == "":
+      cmd=" "
   ecmd=Encrypt_XOR(cmd,key)
-  c.send(bytes(ecmd,'utf8'))                   #sends ciphertext to client
+  c.send(bytes(ecmd,'utf8'))                                            #sends ciphertext to client
   if cmd == 'bye' and r == 'bye':
      break
-  r=c.recv(1024).decode('utf8')                #receives ciphertext from client
+  r=Decrypt_XOR(c.recv(1024).decode('utf8'),key)                #receives ciphertext from client
   print ("\nCLIENT: ",r)
 c.close()

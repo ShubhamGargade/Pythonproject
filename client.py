@@ -1,5 +1,5 @@
 import socket
-def Encrypt_XOR():
+def Encrypt_XOR(cmd,key):
     st=""
     for i in cmd:
         st+=str(ord(i))+str(ord('~'))
@@ -49,9 +49,11 @@ print("\nCONNECTED WITH SERVER")
 key=create_key()
 cmd1=""
 while cmd1!="bye":
-   print ("\nSERVER: ",Decrypt_XOR(s.recv(1024).decode('utf8'),key))
+   print("\nSERVER: ",Decrypt_XOR(s.recv(1024).decode('utf8'),key))
    cmd1=input("\nCLIENT: ")
-   ecmd1=cmd1
+   if cmd1 == "":
+       cmd1=" "
+   ecmd1=Encrypt_XOR(cmd1,key)
    s.send(bytes(ecmd1,'utf8'))
 r=s.recv(1024).decode('utf8')
 if r == 'bye':
