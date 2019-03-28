@@ -1,13 +1,13 @@
 import socket
-def Encrypt_XOR(cmd,key):
+def Encrypt_XOR(cmd,key):                         #Encrypts the plaintext
     st=""
     for i in cmd:
-        st+=str(ord(i))+str(ord('~'))
+        st+=str(ord(i))+str(ord('~'))      #converts characters into it's ASCII values and '~' acts as intermediate between them
     cipher=int(st)^key
     h=hex(cipher)
-    print("\nciphertext:",h[2:len(h)])
+    #print("\nciphertext:",h[2:len(h)])
     return h[2:len(h)]
-def Decrypt_XOR():
+def Decrypt_XOR():                               #Decrypts  the ciphertext
         t=int('0x'+str(decrypt),0)
         pt=(t^key)
         pt=str(pt)
@@ -17,13 +17,13 @@ def Decrypt_XOR():
         count=0
         v=count
         l=(len(pt)-2)
-        for i in range(0,len(pt)):
+        for i in range(0,len(pt)):         #used to convert ASCII values to it's characters
           if count>v:
               v=v+1
               continue
           if i<l:
             bt=pt[i]+pt[i+1]+pt[i+2]
-            if bt == '126':
+            if bt == '126':                #acts as intermediate between two characters
                 count+=2
                 bt=0
                 plaintext+=chr(int(s))
@@ -32,7 +32,7 @@ def Decrypt_XOR():
                 s+=(pt[i])
                 bt=0
         return plaintext
-def create_key():
+def create_key():                               #Generates keys for encryption and decryption purpose
     p=2379
     q=3289
     a=6734
@@ -49,15 +49,15 @@ print("\nCONNECTING............")
 s.bind((host,port))
 s.listen()
 c,add=s.accept()
-print ("\nCONNECTED WITH CLIENT: ",add)
+print ("\nCONNECTED WITH CLIENT: ",add)   #shows connection with client by displaying it's host and port
 key=create_key()
 cmd=""
 while cmd!="bye":
   cmd=input("\nSERVER: ")
   ecmd=Encrypt_XOR(cmd,key)
-  c.send(bytes(ecmd,'utf8'))
+  c.send(bytes(ecmd,'utf8'))                   #sends ciphertext to client
   if cmd == 'bye' and r == 'bye':
      break
-  r=c.recv(1024).decode('utf8')
+  r=c.recv(1024).decode('utf8')                #receives ciphertext from client
   print ("\nCLIENT: ",r)
 c.close()
